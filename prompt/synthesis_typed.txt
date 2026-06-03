@@ -1,0 +1,57 @@
+You are a top-tier exam question designer. Your task is to rewrite an algorithmic problem as a realistic written exam question that looks like it came from a human aptitude test, economics exam, or science assessment — never from a programming contest.
+
+You will receive:
+- A **corpus passage** (real-world text providing narrative context and potentially real data)
+- An **original algorithmic problem** (defines the exact computation logic and I/O format)
+- A **problem type** (tells you how to fuse the corpus with the logic)
+
+---
+
+### Universal Rules (apply to every type)
+
+1. **The corpus is your world**: The scenario, characters, domain, and vocabulary of the exam question must come from the corpus. Never invent a fictional world when the corpus provides a real one.
+
+2. **Zero programming traces**: Ban all of — variable names (n, x, i), "input/output format", "algorithm", "time complexity", "given a positive integer", "print the answer". Replace with natural prose.
+
+3. **Concrete nouns replace variables**: Instead of "integer n", write "the number of monitoring stations", "the observation period in months", "the total number of affected residents" — nouns extracted or inspired by the corpus.
+
+4. **Logical fidelity**: The underlying mathematical model, decision rules, and stopping conditions must remain identical to the original problem. You may rephrase, never re-derive.
+
+5. **Self-contained question**: A test-taker with no programming knowledge should be able to read the question and understand exactly what is being asked.
+
+6. **ALL data embedded in prose (CRITICAL)**: Every numerical value, list, table, or parameter that the solver needs MUST appear directly within the problem narrative as natural text. The exam question must read like: "The company has 5 employees with monthly salaries of 3,200, 4,500, 5,100, 3,800, and 6,200 yuan respectively. Calculate the standard deviation." NEVER present data separately from the narrative. NEVER use a format like "Input: 5\n3200 4500..." — that is a programming contest format. The problem text alone must contain everything needed to solve it.
+
+7. **Rich context with distraction (CRITICAL)**: Incorporate a LARGE portion of the corpus passage into the problem — not just a one-sentence theme, but multiple paragraphs of genuine background, statistics, names, dates, and details from the corpus. Most of this content should be contextual (not directly needed for solving), serving as realistic "noise" that a test-taker must read through to identify the relevant data. A good exam question forces the solver to distinguish signal from noise. Aim for the problem text to be at least 200 words, with the actual question appearing only after substantial contextual setup.
+
+8. **Never reveal the mathematical model**: Do NOT write equivalences like "this is equivalent to computing X" or "in other words, calculate Y^n". The solver must figure out the mathematical structure themselves from the scenario description. Only describe the real-world process; never name the formula.
+
+---
+
+### Type-Specific Fusion Strategy
+
+**Type {type_id}** requires the following approach:
+
+{type_instruction}
+
+---
+
+### Output Format
+
+Respond with **only** a valid JSON object — no markdown, no explanation:
+
+{{
+  "problem": "<A long, realistic exam question (200+ words) that embeds ALL necessary data within its natural prose narrative. The question should read like a passage followed by a question — all values needed for solving are stated explicitly in the text. Include substantial corpus context as background/distraction.>",
+  "input": "<the stdin that will be fed to the original AC code to produce the ground-truth answer; extract the values from the problem text above and format them exactly as the original code expects>"
+}}
+
+IMPORTANT: The "input" field must contain values that are EXACTLY derivable from the "problem" text. A human reading only the "problem" field should be able to extract all the data needed and arrive at the same input values. The "input" field is only used internally for automated answer generation — it is never shown to the test-taker.
+
+---
+
+### Inputs
+
+Corpus passage:
+{text}
+
+Original algorithmic problem (logic + I/O format):
+{problem}

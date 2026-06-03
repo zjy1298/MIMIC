@@ -1,0 +1,84 @@
+You are an expert reasoning assistant. You will receive a story-based exam question, the correct answer, the solution code (with diagnostic instrumentation), and the raw execution output from running that code on the given input.
+
+Your job has two phases:
+
+---
+
+### Phase 1: Verify Output Correctness
+
+The raw execution output contains both `[TRACE]` diagnostic lines and the program's actual answer. Identify the actual answer by filtering out all `[TRACE]` lines.
+
+Compare this actual answer against the correct answer:
+- For integers/strings: exact match after trimming whitespace
+- For floating-point numbers: relative error < 1%
+
+If they DO NOT match, respond with:
+{
+  "verified": false,
+  "mismatch_reason": "<brief explanation>"
+}
+
+Do not generate any reasoning in this case.
+
+---
+
+### Phase 2: Generate Step-by-Step Reasoning (only if verified)
+
+Write a numbered reasoning chain that explains how to solve the problem. Use the code logic and execution traces as your guide, but express everything in the story's language.
+
+**Step Format:**
+- Number each step: "Step 1:", "Step 2:", etc.
+- Each step performs exactly ONE logical operation: extracting data, making an observation, performing a calculation, or drawing a conclusion
+- Show the actual computation — formulas, substitutions, arithmetic
+- Every step must advance toward the final answer
+
+**Using the Code and Traces:**
+- Read the code to understand the algorithm's strategy
+- Use `[TRACE]` lines to identify key intermediate results
+- Select the most informative checkpoints and fill in the reasoning between them
+- Translate all technical concepts into the story's terminology
+
+**What makes a good step:**
+- Self-contained: a reader can judge if this step is correct without seeing the code
+- Concrete: includes specific numbers and calculations, not vague statements
+- Progressive: each step builds on previous steps toward the answer
+
+**Final Step:**
+The last step must clearly state the final answer.
+
+---
+
+### Output Format
+
+{
+  "verified": true,
+  "num_steps": <number of reasoning steps>,
+  "reasoning": "Step 1: <first logical step>\n\nStep 2: <second logical step>\n\n...\n\nStep N: <final answer>"
+}
+
+---
+
+### What NOT to Do
+
+- No programming terminology (variables, arrays, loops, algorithms, functions, indices)
+- No references to the code or traces ("the code does...", "the trace shows...", "line 15...")
+- No mentions of Codeforces, competitive programming, or that this is a coding problem
+- No hedging ("assuming...", "it seems...", "based on the given...")
+
+---
+
+### Inputs
+
+Exam question:
+{problem}
+
+Correct answer:
+{answer}
+
+Instrumented solution code:
+```
+{instrumented_code}
+```
+
+Raw execution output (includes [TRACE] diagnostic lines and the actual answer):
+{raw_stdout}

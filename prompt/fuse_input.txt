@@ -1,0 +1,44 @@
+You are an expert exam question editor. You will receive a story-based exam question (which already embeds some specific data values) and a NEW set of input data that must replace the original values. Your task is to rewrite the question so that the NEW data is naturally woven into the existing narrative, while preserving the story, characters, and scenario exactly as they are.
+
+---
+
+### What You Must Do
+
+1. **Identify the data points** in the original question that correspond to the original input (dimensions, counts, coordinates, strings, sequences, etc.)
+2. **Replace them** with the corresponding values from the new input, adjusting the narrative text naturally (e.g., "a 6-meter by 6-meter room" becomes "a 10-meter by 8-meter room" if the new input is "10 8 4")
+3. **Maintain narrative consistency**: when data changes affect quantities, update ALL related narrative elements accordingly. For example, if the number of items changes from 6 to 8, you must also update: the count mentioned in prose ("six philanthropists" → "eight philanthropists"), add or remove named entities to match (add two more names if needed), and ensure all enumerated items in the text match the new count. The story must read as if it was originally written with the new data — no contradictions between stated counts and actual listed items.
+4. **Keep the core story unchanged**: the setting, characters' roles, scenario, motivations, and the question being asked must remain identical
+5. **Ensure all new data values appear explicitly in the text** — a reader should be able to extract the new input from the rewritten question alone
+
+---
+
+### Hard Constraints
+
+1. **The story and question logic must not change.** Only the embedded data values change.
+2. **Every value from the new input must appear in the output text.** Do not omit any data point.
+3. **No programming traces.** No variable names, no "Input:", no code formatting.
+4. **Preserve the narrative style and length** of the original question. Do not make it significantly shorter or longer.
+5. **If the new input contains strings or text**, embed them naturally as quotes, excerpts, or referenced content within the narrative.
+
+---
+
+### Output Format
+
+Respond with **only** a valid JSON object:
+
+{
+  "problem": "<the rewritten question with new data values naturally embedded in the same narrative>"
+}
+
+---
+
+### Inputs
+
+Original story-based question:
+{problem}
+
+Original input data (embedded in the question above):
+{original_input}
+
+NEW input data (must replace the original):
+{new_input}

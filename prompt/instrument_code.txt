@@ -1,0 +1,83 @@
+You are a code analysis and debugging expert. Your task is to insert diagnostic output statements into a program that has passed all test cases (AC code), so that the program prints key intermediate computation results during execution. These intermediate results will help humans understand the program's complete problem-solving process.
+
+You will receive:
+- An **algorithm problem** (describing the problem background, input/output format, and examples)
+- An **AC code** (a correct program that has passed all test cases)
+
+---
+
+### Core Principles
+
+1. **Read-only instrumentation**: You may only ADD output statements — never modify, delete, or reorder any existing code. Every inserted statement must be purely observational — it must not change any variable's value, control flow, or the program's original behavior.
+
+2. **[TRACE] prefix**: All inserted diagnostic output must start with `[TRACE]` to clearly separate it from the program's official output. During post-processing, all `[TRACE]` lines will be filtered out to recover the original answer.
+
+3. **Structured format**: Each TRACE line must follow this format:
+   ```
+   [TRACE] event_label | key1=value1 | key2=value2
+   ```
+   - **event_label**: A short English tag describing what just happened (e.g., `init`, `after_sort`, `update_best`, `branch_taken`, `phase_end`, `final_summary`)
+   - **key=value**: The name and current value of key variables. Use semantic names (write `max_profit=3`, not just `x=3`)
+   - If a value is an array/list with more than 10 elements, print only the first 5 elements plus `...`, e.g., `arr=[1,2,3,4,5,...](len=100)`
+
+4. **Output volume control (critically important)**:
+   - **Hard limit**: No more than 20 TRACE lines total
+   - **Never** print unconditionally inside the innermost loop — if a loop may execute hundreds or thousands of times, you must add a conditional guard
+   - **Prefer event-driven output**: Only print when something meaningful happens (a value is updated, a state changes, a condition is met)
+   - **Sampling fallback**: If you must show a loop's progress, print every `max(1, total_iterations // 5)` steps to produce at most 5–6 lines
+
+5. **Match the original code's output method**:
+   - If the original code uses `cout`, use `cout` for TRACE too (to avoid output reordering when `sync_with_stdio(false)` is set)
+   - If the original code uses `printf`, use `printf` for TRACE too
+   - For Python, always use `print(f"[TRACE] ...")`
+
+---
+
+### Instrumentation Location Guidance
+
+The following are typically valuable observation points. Judge which ones apply based on the specific code:
+
+- **After input is fully read**: Print a summary of key input data (e.g., array length, critical parameter values)
+- **After data preprocessing**: After sorting, graph construction, or grouping — print a summary of the processed result
+- **When a key variable is updated**: When the optimal value is refreshed, a counter changes, or an element is added to a set — print the before/after values
+- **At important branch decisions**: At if-else branches, print which path was taken and the deciding factors
+- **At algorithm phase transitions**: For multi-phase algorithms, print a summary at the end of each phase
+- **Before final output**: Print the key factors that determined the final answer
+
+You do not need to cover every category — select the 5–15 observation points most critical to understanding the specific algorithm.
+
+---
+
+### Output Format
+
+Output only a valid JSON object — no markdown, no explanation:
+
+{{
+  "analysis": "<2-4 sentences summarizing the code's algorithm, core data structures, and key logic>",
+  "trace_plan": [
+    {{
+      "location": "<description of insertion point, e.g., 'after sorting (after line 15)' or 'when best is updated (inside the if-block at line 23)'>",
+      "event": "<event label>",
+      "variables": "<list of variables to print>",
+      "reason": "<why this location's information is valuable for understanding the solving process>"
+    }}
+  ],
+  "instrumented_code": "<complete instrumented code — all original code plus inserted TRACE statements, ready to run>"
+}}
+
+Important:
+- `instrumented_code` must be complete runnable code — never use ellipsis or comments to replace any original code
+- After filtering out all `[TRACE]` lines, the program's output must be identical to the original code's output
+- Each entry in `trace_plan` must correspond one-to-one with an actual TRACE statement in `instrumented_code`
+
+---
+
+### Input
+
+Algorithm problem:
+{problem}
+
+AC code:
+```{language}
+{code}
+```

@@ -1,0 +1,65 @@
+### Role: Algorithm Task Cognitive Classifier
+
+**Task Description:**
+You are a cognitive task analysis expert. I will provide you with a problem from Codeforces or LeetCode (including the problem description, tags, and editorial).
+Please set aside the convenience of "writing code" and instead consider: **If one were to solve this problem manually without code, which category in the following classification framework would the core difficulty and operational logic belong to?**
+
+---
+
+### Classification Framework Reference:
+
+#### Type 1: Text-Encoded Visual/Spatial Reasoning
+* **1.1 Grid/Board/Pixel Map Encoding:** Layouts represented using character matrices/ASCII art. The difficulty lies in recovering 2D structure from text, involving adjacency, connectivity, and shape recognition.
+* **1.2 Geometric/Coordinate and Directional Relationship Grounding:** Processing spatial logic such as "left/right/up/down", line segment intersection, point-in-polygon, etc.
+* **1.3 Glyph/Radical and "Character Decomposition/Stroke" Type:** Depends on visual properties of Chinese characters such as components, stroke counts, mirror/rotation, and glyph structure.
+* **1.4 Text-Encoded Chart/Table Layout Understanding:** Information is hidden in space-aligned formatting, indentation (e.g., tree structures), or fixed-width column layouts.
+
+#### Type 2: Sub-Token / Character Manipulation
+* **2.1 Character-Level Counting, Extraction, and Replacement:** Counting letter frequencies, extracting characters at specific positions, simple substitutions.
+* **2.2 Character-Level Mapping and Cryptography:** Caesar cipher, ASCII code shifting, Base64 encoding/decoding, and other per-character transformation rules.
+* **2.3 Strict Format Validation and Regex:** Verifying whether strings conform to specific symbol arrangement rules (e.g., email format, serial number validation).
+
+#### Type 3: Precise Mathematical Computation
+* **3.1 Discrete and High-Precision Arithmetic:** Addition, subtraction, multiplication, and division of very large numbers or numbers with extremely many decimal places, exponentiation.
+* **3.2 Algebraic and Symbolic Computation:** Solving equations (x, y), matrix derivation, calculus, derivatives, and other symbolic logic.
+* **3.3 Probability, Statistics, and Set Operations:** Standard deviation, variance, permutations and combinations, probability distribution derivation.
+
+#### Type 4: Large-Scale Data Processing
+* **4.1 Search and Filtering:** Finding a needle in a haystack within massive data — locating specific records that meet certain criteria.
+* **4.2 Grouping, Aggregation, and Sorting:** Rearranging, grouping, or summarizing global data.
+* **4.3 Structural Mapping and Transformation:** Changing the organizational form of data (e.g., JSON to CSV, flattening nested dictionaries).
+
+#### Type 5: Strict Rule & State Simulation
+* **5.1 Pathfinding and Graph Traversal:** Optimization of spatial relationships; the core involves DFS/BFS/shortest path algorithms.
+* **5.2 Constraint Satisfaction and Backtracking Search:** Finding valid solutions under mutually exclusive rules, such as Sudoku, Eight Queens, shift scheduling.
+* **5.3 Iterative and Dynamic System Simulation:** State machine derivation, where step N strictly depends on step N-1 (e.g., Game of Life, physics simulation, code execution simulation).
+
+---
+
+### Analysis Instructions:
+
+After thorough analysis, please output your final conclusion in the following JSON format. If the problem cannot be classified into an existing category, set the `new` field to `true` and provide your proposed names in the `level1` and `level2` fields.
+
+```json
+{
+  "core_step": "Brief description of the specific actions a human would take to solve this problem with pen and paper",
+  "level1": "The major category number (1-5) it belongs to",
+  "level2": "The subcategory number (1.1-5.3) it belongs to",
+  "new": "false/true",
+  "reason": "Brief explanation of the classification rationale or the reason for creating a new category"
+}
+
+### Input Data:
+
+**Problem Content:**
+{question}
+
+**Tags:**
+{tags}
+
+**Editorial (Solution):**
+{editorial}
+
+---
+
+**Please begin your analysis:**

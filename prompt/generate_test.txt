@@ -1,0 +1,178 @@
+Act as an "algorithm test data construction expert" and generate Python code to construct test inputs.
+
+## Core Objective
+
+Construct test inputs that expose flaws in a model's reasoning logic.
+
+Key principle: We aim to hack the model's REASONING PARADIGM, not its arithmetic ability.
+- Do NOT use large values to overwhelm the model's computation
+- Do NOT use excessively long inputs to make the model give up
+- DO use cleverly designed logic traps to make the model reason incorrectly
+- DO use boundary conditions to trigger the model's cognitive blind spots
+
+Good test inputs should be "small but sharp": small enough for a human to verify by hand, yet containing logical traps that cause reasoning errors. The output should be clear and traceable, suitable for generating reasoning chains later.
+
+## Problem Type Identification & Scale Constraints
+
+First, identify which type this problem belongs to and strictly follow the corresponding scale constraints.
+
+1. Array / Sequence Processing (sorting, intervals, subsequences, sliding window)
+   - n <= 100, val <= 10^5
+   - Hack focus: equal elements, reverse order, all identical, single element, off-by-one boundary satisfaction
+
+2. String / Character-Level Operations (character counting, pattern matching, mapping, format validation)
+   - String length <= 200
+   - Hack focus: empty string, single character, palindrome, all repeating, special characters (spaces/newlines/punctuation), case boundaries
+
+3. Mathematical Computation (number theory, combinatorics, formula evaluation, probability/statistics)
+   - val <= 10^5, exponents <= 20 when exponentiation is involved
+   - Hack focus: zero, negative numbers, one, exact divisibility vs. non-divisibility, coprime vs. non-coprime, odd/even boundaries
+
+4. Graph / Tree / DP (graph traversal, shortest path, dynamic programming, tree structures)
+   - Nodes <= 200, edge weights <= 10^5
+   - Hack focus: isolated nodes, self-loops, chain graphs, star graphs, complete graphs, single node, disconnected components, DAG vs. cyclic
+
+5. Grid / Matrix / Spatial (matrix operations, mazes, coordinate movement, ASCII diagrams)
+   - Rows and columns each <= 50
+   - Hack focus: 1x1, 1xn, fully filled, fully empty, diagonal only, corner elements, wrap-around boundaries
+
+6. State Simulation / Rule Application (games, state machines, iterative simulation)
+   - Simulation steps <= 100, state values <= 10^5
+   - Hack focus: immediately terminal state, entering a cycle, symmetric states, exact boundary steps, deadlock
+
+Universal upper bounds: n <= 200, val <= 10^5 for all problem types.
+If the problem itself defines a smaller domain, follow the problem's constraints.
+
+## Execution Steps
+
+Step 1 - Analyze the AC Code's Decision Points
+
+Carefully read the AC code and identify all "key decision points" — if/else branches, comparison operators, loop boundaries, special value handling, etc. List at least 5 decision points and annotate each with:
+- Trigger condition: what kind of input takes this path
+- Logic trap: what error a model reasoning without seeing the code might make here
+- Guided mode name: the mode name for Level C random generation
+
+Focus on these reasoning error patterns that commonly trip up models:
+- Boundary blind spots: n=0, n=1, empty sets, and other extreme cases
+- Equality traps: subtle differences between < vs <=, > vs >=
+- Path omission: the model might overlook a particular if/else branch
+- Greedy failure: cases where local optimum does not equal global optimum
+- Initial condition sensitivity: where the choice of initial value affects the final result
+- Symmetry breaking: seemingly symmetric inputs that actually follow different paths
+
+Step 2 - Design 5 Hardcoded Logic Traps for the Most Critical Decision Points
+
+Select the 5 decision points from Step 1 that are most likely to cause the model to reason incorrectly, and construct 1 precisely targeted case for each.
+Requirements:
+- "Incorrect" means logical reasoning errors, not computational errors
+- Each case must include a comment explaining the targeted decision point and expected trap
+- Values should be small enough for manual verification
+
+Step 3 - Generate 30 Test Inputs in Three Levels
+
+Level A (5 cases) - Minimal boundary inputs:
+  - n = 0 to 3, using minimum values
+  - Purely verifying whether basic logic is correct
+
+Level B (5 cases, all HARDCODED):
+  - Hardcode 5 carefully designed logic trap cases
+  - Each must include a comment explaining the targeted decision point and expected trap
+  - random is FORBIDDEN
+
+Level C (20 cases, Guided Random):
+  - Convert Step 1's decision points into a modes list
+  - Cycle through modes via modes[i % len(modes)] to ensure all decision points are covered
+  - Strictly follow the problem type scale constraints
+  - Each mode must have its own independent generation logic (do not share the same random code across modes)
+  - Each input should have a clear logical intent, not just random numbers
+
+Key constraints:
+- Strictly follow the scale constraints from the problem type table above
+- Level B forbids random; Level C must be guided (no pure random)
+- Each input must conform to the problem's input format requirements
+- Do NOT place difficulty on large-value computation
+
+---
+
+The main() function must be written exactly as follows (system parsing depends on this):
+
+```python
+def main():
+    print(generate_test_inputs(30))
+
+if __name__ == "__main__":
+    main()
+```
+
+print must act on the entire list and be called exactly once. Do NOT use for case in result: print(case) or any line-by-line printing.
+
+---
+
+Output format is stdin (standard input). Each case is a multi-line input string conforming to the problem statement.
+
+Code template (replace mode names and generation logic based on this problem's actual decision points):
+
+```python
+def generate_test_inputs(num_cases=30):
+    import random
+    random.seed(42)
+    cases = []
+
+    # ===== Level A: Minimal boundary (5 cases) =====
+    cases.append("1\n0")
+    cases.append("1\n-1")
+    cases.append("2\n1 2")
+    cases.append("2\n2 1")
+    cases.append("3\n0 0 0")
+
+    # ===== Level B: Hardcoded logic traps (5 cases, random FORBIDDEN) =====
+    cases.append("5\n1 1 1 1 1")       # Trap: all equal, model may misjudge strict comparison
+    cases.append("4\n1 2 1 2")         # Trap: periodic input, model may miss cyclic pattern
+    cases.append("3\n100 1 100")       # Trap: valley structure, model may misjudge extremum position
+    cases.append("1\n99999")           # Trap: single element + value domain boundary
+    cases.append("6\n1 2 3 4 5 6")    # Trap: strictly increasing, model may incorrectly add equality
+
+    # ===== Level C: Guided Random (20 cases) =====
+    # modes derived from Step 1 decision points (replace for this problem)
+    modes = ['nearly_sorted', 'all_equal', 'alternating', 'single_outlier', 'palindrome']
+    for i in range(20):
+        n = random.randint(10, 100)     # n <= 100
+        mode = modes[i % len(modes)]
+        if mode == 'nearly_sorted':
+            arr = sorted([random.randint(1, 10**5) for _ in range(n)])
+            for _ in range(max(1, n // 20)):
+                a, b = random.sample(range(n), 2)
+                arr[a], arr[b] = arr[b], arr[a]
+        elif mode == 'all_equal':
+            val = random.randint(1, 10**5)
+            arr = [val] * n
+        elif mode == 'alternating':
+            lo, hi = random.randint(1, 100), random.randint(1000, 10**5)
+            arr = [lo if j % 2 == 0 else hi for j in range(n)]
+        elif mode == 'single_outlier':
+            base = random.randint(1, 1000)
+            arr = [base] * n
+            arr[random.randint(0, n-1)] = random.randint(10000, 10**5)
+        else:  # palindrome
+            half = [random.randint(1, 10**5) for _ in range(n // 2)]
+            arr = half + ([random.randint(1, 10**5)] if n % 2 else []) + half[::-1]
+        cases.append(f"{n}\n" + " ".join(map(str, arr)))
+
+    return cases[:num_cases]
+
+def main():
+    print(generate_test_inputs(30))
+
+if __name__ == "__main__":
+    main()
+```
+
+If the problem specifies the first line as the number of test cases T, wrap each case in a valid multi-test format (e.g., T=1).
+
+---
+
+Below are the [Problem Description] and [AC Code] for this problem:
+
+[Problem]: {problem}
+[AC code]: {code}
+[Language]: {language}
